@@ -1,0 +1,8 @@
+Basically, a pipeline splits your data into smaller chunks and processes each chunk independently.
+Because of this, it is highly scalable and can process tremendous amount of data with many workers running in parallel across several machines.
+We can use Java, Python, Go and Scala to write our pipelines.
+This series of tutorial will show you how to write your pipelines in Java and execute them locally using DirectRunner as well as with other runners.
+The concepts are similar even if you use different programming language. I highly recommend you to check out their documentation for learning core concepts of Beam.
+
+Apache Beam is a relatively new framework that provides both batch and stream processing of data in any execution engine.
+In Beam you write what are called pipelines, and run those pipelines in any of the runners. Beam supports many runners such as:
