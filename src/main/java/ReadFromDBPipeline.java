@@ -10,7 +10,9 @@ import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PDone;
+import org.apache.commons.dbcp2.DataSourceConnectionFactory;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Date;
@@ -22,15 +24,15 @@ public class ReadFromDBPipeline {
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
 
+        JdbcIO.DataSourceConfiguration dataSource = JdbcIO.DataSourceConfiguration
+                .create("org.postgresql.Driver","jdbc:postgresql://localhost:5434/company_service")
+                .withUsername("postgres")
+                .withPassword("postgres");
 
         // read from text file
         PCollection<KV<String, String>> rows = pipeline.apply(JdbcIO.<KV<String, String>>read()
-                .withDataSourceConfiguration(JdbcIO.DataSourceConfiguration
-                                .create("org.postgresql.Driver","jdbc:postgresql://localhost:5434/company_service")
-                               //.create("org.postgresql.Driver","jdbc:postgresql://postgres@postgresql:5434/company_service")
-                        .withUsername("postgres")
-                        .withPassword("postgres"))
-                .withQuery("select id, matricule from driver")
+                .withDataSourceConfiguration(dataSource)
+                .withQuery("select id, matricule from driver where driver.matricule is not null")
                 .withCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
                 .withRowMapper(new JdbcIO.RowMapper<KV<String, String>>() {
                     @Override
@@ -46,7 +48,7 @@ public class ReadFromDBPipeline {
                 return String.format("%s => %s", input.getKey(), input.getValue());
             }
         }))
-        .apply(TextIO.write().to("drivers_registration_number."))
+        .apply(TextIO.write().to("drivers_registration_number"))
         ;
 
         pipeline.run().waitUntilFinish();
