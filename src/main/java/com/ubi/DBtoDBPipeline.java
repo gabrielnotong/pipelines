@@ -1,3 +1,5 @@
+package com.ubi;
+
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.coders.KvCoder;
 import org.apache.beam.sdk.coders.StringUtf8Coder;
@@ -13,7 +15,7 @@ import java.sql.ResultSet;
 public class DBtoDBPipeline {
 
     public static void main(String[] args) {
-        PipelineOptions options = PipelineOptionsFactory.create();
+        PipelineOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().create();
         Pipeline pipeline = Pipeline.create(options);
 
         // Company Service DB
@@ -54,7 +56,7 @@ public class DBtoDBPipeline {
             }
         }));
 
-        pipeline.run().waitUntilFinish();
+        pipeline.run();
     }
 
     private static JdbcIO.DataSourceConfiguration getConnection(String url, String username, String pwd) {

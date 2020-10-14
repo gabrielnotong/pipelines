@@ -1,5 +1,6 @@
+package com.ubi;
+
 import org.apache.beam.sdk.Pipeline;
-import org.apache.beam.sdk.coders.BigEndianIntegerCoder;
 import org.apache.beam.sdk.coders.KvCoder;
 import org.apache.beam.sdk.coders.StringUtf8Coder;
 import org.apache.beam.sdk.io.TextIO;
@@ -9,14 +10,7 @@ import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
-import org.apache.beam.sdk.values.PDone;
-import org.apache.commons.dbcp2.DataSourceConnectionFactory;
-
-import javax.sql.DataSource;
 import java.sql.ResultSet;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class ReadFromDBPipeline {
 
